@@ -582,11 +582,9 @@ function submitForm() {
   };
 
   if (CONFIG.makeWebhookUrl && CONFIG.makeWebhookUrl !== 'YOUR_MAKE_WEBHOOK_URL_HERE') {
-    fetch(CONFIG.makeWebhookUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    }).then(() => showSuccess()).catch(() => showSuccess());
+    const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+    navigator.sendBeacon(CONFIG.makeWebhookUrl, blob);
+    showSuccess();
   } else {
     console.log('LEAD DATA (connect Make.com webhook):', payload);
     setTimeout(() => showSuccess(), 800);
