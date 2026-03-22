@@ -582,7 +582,7 @@ function submitForm() {
   };
 
   if (CONFIG.makeWebhookUrl && CONFIG.makeWebhookUrl !== 'YOUR_MAKE_WEBHOOK_URL_HERE') {
-    const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+    const blob = new Blob([JSON.stringify(payload)], { type: 'text/plain' });
     navigator.sendBeacon(CONFIG.makeWebhookUrl, blob);
     showSuccess();
   } else {
