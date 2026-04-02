@@ -368,6 +368,14 @@
     <span class="dot"></span>
     Online Now — Quick Response
   </div>
+  <div style="display:flex; gap:0.75rem; margin-bottom:1.5rem; flex-wrap:wrap; justify-content:center;">
+    <div style="display:inline-flex; align-items:center; gap:6px; padding:6px 16px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); border-radius:100px; font-size:0.85rem; color:var(--text);">
+      🇲🇽 Se habla español
+    </div>
+    <button onclick="toggleLanguage()" id="lang-toggle" style="display:inline-flex; align-items:center; gap:6px; padding:6px 16px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); border-radius:100px; font-size:0.85rem; color:var(--text); cursor:pointer; font-family:'DM Sans',sans-serif;">
+      🌐 Ver en Español
+    </button>
+  </div>
   <h1>I'll send you a <span class="highlight">video walkaround</span> before you come in</h1>
   <p class="subtitle">I'm Alex Castro. I help people find the right car in Long Beach with zero pressure. Tell me what you're looking for and I'll personally show you what we've got.</p>
   <div class="cta-group">
@@ -634,6 +642,195 @@ function submitForm() {
 function showSuccess() {
   document.getElementById('form-content').style.display = 'none';
   document.getElementById('form-success').style.display = 'block';
+}
+
+// ============================================================
+// LANGUAGE TOGGLE — ENGLISH / SPANISH
+// ============================================================
+let currentLang = 'en';
+
+const translations = {
+  en: {
+    headline: "I'll send you a <span class='highlight'>video walkaround</span> before you come in",
+    subtitle: "I'm Alex Castro. I help people find the right car in Long Beach with zero pressure. Tell me what you're looking for and I'll personally show you what we've got.",
+    inventory: "Inventory",
+    callMe: "Call Me",
+    textMe: "Text Me",
+    leaveInfo: "Leave Your Info",
+    videoTitle: "See the car before you see the lot",
+    videoDesc: "Text me the type of car you want and your budget. I'll walk the lot, find what fits, and send you a personal video walkaround on my phone — so you know exactly what you're getting before you drive over.",
+    videoBtn: "Text Me What You're Looking For",
+    howLabel: "How It Works",
+    howTitle: "Simple. Personal. No games.",
+    step1Title: "Tell me what you need",
+    step1Desc: "Call, text, or fill out the form. What kind of car? What's your budget? First-time buyer or rebuilding credit? I've helped hundreds of people in every situation.",
+    step2Title: "I send you a video",
+    step2Desc: "I'll walk the lot, find what matches, and record a personal video walkaround showing you every angle. You see the car — inside and out — before you leave your couch.",
+    step3Title: "Come check it out",
+    step3Desc: "If you like what you see, come in for a test drive. I'll work with our finance team to get you the best deal for your credit and budget. No surprises.",
+    reviewLabel: "Real People, Real Reviews",
+    reviewTitle: "Don't take my word for it",
+    reviewDesc: "From actual customers who came to see me at M Motorsport.",
+    whyLabel: "Why People Come To Me",
+    whyTitle: "The difference",
+    fast: "I Reply Fast",
+    fastDesc: "Text me at 10pm and I'll have options for you by morning. Most dealerships take 24 hours to send a generic email. I send a personal video in minutes.",
+    finance: "Financing Is Our Thing",
+    financeDesc: "First-time buyer, rebuilding credit, student? M Motorsport has been helping Long Beach families get approved for 12+ years. We work with every situation.",
+    noPressure: "No Pressure, Ever",
+    noPressureDesc: "I don't get paid to pressure you. I get paid to help you find the right car. If it's not the right fit, I'll tell you.",
+    seeBefore: "See Before You Visit",
+    seeBeforeDesc: "Every car I recommend comes with a personal video walkaround. You'll know exactly what you're looking at before you step on the lot.",
+    ytLabel: "See Us In Action",
+    ytTitle: "This is how we do it.",
+    formLabel: "Not Ready To Call?",
+    formTitle: "Leave your info. I'll reach out.",
+    formDesc: "Tell me what you're looking for. I'll text you back with options and a personal video walkaround.",
+    nameLabel: "Your Name",
+    phoneLabel: "Phone",
+    emailLabel: "Email",
+    carLabel: "What car are you interested in?",
+    carPlaceholder: "e.g. 2023 Ford Mustang, SUV under $25k, Honda Civic",
+    msgLabel: "Anything else I should know?",
+    msgPlaceholder: "Example: I'm a first-time buyer, rebuilding credit, need something reliable for my family...",
+    submitBtn: "Send to Alex",
+    bottomCta: "Let's find your next car.",
+    langToggle: "🌐 Ver en Español"
+  },
+  es: {
+    headline: "Te mando un <span class='highlight'>video del carro</span> antes de que vengas",
+    subtitle: "Soy Alex Castro. Ayudo a familias a encontrar el carro perfecto en Long Beach. Sin presión, sin juegos. Dime qué buscas y te muestro lo que tenemos.",
+    inventory: "Inventario",
+    callMe: "Llámame",
+    textMe: "Mándame Texto",
+    leaveInfo: "Deja Tu Info",
+    videoTitle: "Mira el carro antes de venir",
+    videoDesc: "Mándame un texto con el tipo de carro que buscas y tu presupuesto. Yo camino el lote, busco lo que necesitas, y te mando un video personal — para que sepas exactamente lo que vas a ver.",
+    videoBtn: "Mándame Texto Con Lo Que Buscas",
+    howLabel: "Cómo Funciona",
+    howTitle: "Simple. Personal. Sin juegos.",
+    step1Title: "Dime qué necesitas",
+    step1Desc: "Llama, manda texto, o llena el formulario. ¿Qué tipo de carro? ¿Cuál es tu presupuesto? ¿Primera vez comprando o reconstruyendo crédito? He ayudado a cientos de personas.",
+    step2Title: "Te mando un video",
+    step2Desc: "Camino el lote, encuentro lo que necesitas, y te grabo un video personal mostrándote cada ángulo. Ves el carro por dentro y por fuera — sin salir de tu casa.",
+    step3Title: "Ven a verlo",
+    step3Desc: "Si te gusta lo que ves, ven a probarlo. Trabajo con nuestro equipo de financiamiento para conseguirte el mejor trato para tu crédito y presupuesto.",
+    reviewLabel: "Personas Reales, Opiniones Reales",
+    reviewTitle: "No me creas a mí",
+    reviewDesc: "De clientes reales que vinieron a verme a M Motorsport.",
+    whyLabel: "Por Qué La Gente Viene Conmigo",
+    whyTitle: "La diferencia",
+    fast: "Respondo Rápido",
+    fastDesc: "Mándame texto a las 10pm y para la mañana tendrás opciones. La mayoría de agencias tardan 24 horas. Yo te mando un video personal en minutos.",
+    finance: "Financiamiento Es Lo Nuestro",
+    financeDesc: "¿Primera vez comprando? ¿Reconstruyendo crédito? ¿Estudiante? M Motorsport lleva más de 12 años ayudando a familias en Long Beach. Trabajamos con toda situación.",
+    noPressure: "Sin Presión, Nunca",
+    noPressureDesc: "No me pagan por presionarte. Me pagan por ayudarte a encontrar el carro correcto. Si no es para ti, te lo digo.",
+    seeBefore: "Mira Antes de Venir",
+    seeBeforeDesc: "Cada carro que te recomiendo viene con un video personal. Sabrás exactamente lo que vas a ver antes de llegar al lote.",
+    ytLabel: "Míranos En Acción",
+    ytTitle: "Así es como lo hacemos.",
+    formLabel: "¿No Estás Listo Para Llamar?",
+    formTitle: "Deja tu info. Yo te contacto.",
+    formDesc: "Dime qué buscas. Te respondo con opciones y un video personal del carro.",
+    nameLabel: "Tu Nombre",
+    phoneLabel: "Teléfono",
+    emailLabel: "Email",
+    carLabel: "¿Qué carro te interesa?",
+    carPlaceholder: "ej. 2023 Ford Mustang, SUV menos de $25k, Honda Civic",
+    msgLabel: "¿Algo más que deba saber?",
+    msgPlaceholder: "Ejemplo: Es mi primera vez comprando, estoy reconstruyendo crédito, necesito algo confiable para mi familia...",
+    submitBtn: "Enviar a Alex",
+    bottomCta: "Vamos a encontrar tu próximo carro.",
+    langToggle: "🌐 View in English"
+  }
+};
+
+function toggleLanguage() {
+  currentLang = currentLang === 'en' ? 'es' : 'en';
+  const t = translations[currentLang];
+
+  // Hero
+  document.querySelector('.hero h1').innerHTML = t.headline;
+  document.querySelector('.hero .subtitle').textContent = t.subtitle;
+
+  // Toggle button
+  document.getElementById('lang-toggle').innerHTML = t.langToggle;
+
+  // Hero buttons
+  const btns = document.querySelectorAll('.cta-group .btn');
+  if (btns[0]) btns[0].lastChild.textContent = ' ' + t.inventory;
+  if (btns[1]) btns[1].lastChild.textContent = ' ' + t.callMe;
+  if (btns[2]) btns[2].lastChild.textContent = ' ' + t.textMe;
+  if (btns[3]) btns[3].lastChild.textContent = ' ' + t.leaveInfo;
+
+  // Video offer
+  document.querySelector('.video-offer h2').textContent = t.videoTitle;
+  document.querySelector('.video-offer p').textContent = t.videoDesc;
+  const voBtn = document.querySelector('.video-offer .btn');
+  if (voBtn) voBtn.lastChild.textContent = ' ' + t.videoBtn;
+
+  // How it works
+  const labels = document.querySelectorAll('.section-label');
+  const titles = document.querySelectorAll('.section-title');
+  const descs = document.querySelectorAll('.section-desc');
+  if (labels[0]) labels[0].textContent = t.howLabel;
+  if (titles[0]) titles[0].textContent = t.howTitle;
+
+  // Steps
+  const stepH3 = document.querySelectorAll('.step h3');
+  const stepP = document.querySelectorAll('.step p');
+  if (stepH3[0]) { stepH3[0].textContent = t.step1Title; stepP[0].textContent = t.step1Desc; }
+  if (stepH3[1]) { stepH3[1].textContent = t.step2Title; stepP[1].textContent = t.step2Desc; }
+  if (stepH3[2]) { stepH3[2].textContent = t.step3Title; stepP[2].textContent = t.step3Desc; }
+
+  // Reviews
+  if (labels[1]) labels[1].textContent = t.reviewLabel;
+  if (titles[1]) titles[1].textContent = t.reviewTitle;
+  if (descs[0]) descs[0].textContent = t.reviewDesc;
+
+  // Why me
+  if (labels[2]) labels[2].textContent = t.whyLabel;
+  if (titles[2]) titles[2].textContent = t.whyTitle;
+  const cardH3 = document.querySelectorAll('.about-card h3');
+  const cardP = document.querySelectorAll('.about-card p');
+  if (cardH3[0]) { cardH3[0].textContent = t.fast; cardP[0].textContent = t.fastDesc; }
+  if (cardH3[1]) { cardH3[1].textContent = t.finance; cardP[1].textContent = t.financeDesc; }
+  if (cardH3[2]) { cardH3[2].textContent = t.noPressure; cardP[2].textContent = t.noPressureDesc; }
+  if (cardH3[3]) { cardH3[3].textContent = t.seeBefore; cardP[3].textContent = t.seeBeforeDesc; }
+
+  // YouTube
+  if (labels[3]) labels[3].textContent = t.ytLabel;
+  if (titles[3]) titles[3].textContent = t.ytTitle;
+
+  // Form
+  if (labels[4]) labels[4].textContent = t.formLabel;
+  if (titles[4]) titles[4].textContent = t.formTitle;
+  if (descs[1]) descs[1].textContent = t.formDesc;
+
+  // Form fields
+  const formLabels = document.querySelectorAll('.form-group label');
+  if (formLabels[0]) formLabels[0].innerHTML = t.nameLabel + ' <span class="req">*</span>';
+  if (formLabels[1]) formLabels[1].innerHTML = t.phoneLabel + ' <span class="req">*</span>';
+  if (formLabels[2]) formLabels[2].textContent = t.emailLabel;
+  if (formLabels[3]) formLabels[3].textContent = t.carLabel;
+  if (formLabels[4]) formLabels[4].textContent = t.msgLabel;
+
+  const carInput = document.getElementById('f-car');
+  if (carInput) carInput.placeholder = t.carPlaceholder;
+  const msgInput = document.getElementById('f-message');
+  if (msgInput) msgInput.placeholder = t.msgPlaceholder;
+
+  const submitBtn = document.getElementById('form-submit-btn');
+  if (submitBtn) submitBtn.textContent = t.submitBtn;
+
+  // Bottom CTA
+  if (titles[5]) titles[5].textContent = t.bottomCta;
+
+  // Bottom pills
+  const pills = document.querySelectorAll('.contact-pill');
+  if (pills[0]) pills[0].lastChild.textContent = ' ' + t.callMe;
+  if (pills[1]) pills[1].lastChild.textContent = ' ' + t.textMe;
 }
 </script>
 </body>
